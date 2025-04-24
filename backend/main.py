@@ -40,3 +40,9 @@ async def explain_code(request: Request):
             {"role": "user", "content": prompt}
         ]
     }
+
+    response = requests.post(GROQ_API_URL, headers=headers, json=payload)
+    result = response.json()
+
+    explanation = result["choices"][0]["message"]["content"]
+    return {"explanation": explanation}
