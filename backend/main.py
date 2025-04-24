@@ -20,3 +20,16 @@ app.add_middleware(
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
+@app.post("/explain")
+async def explain_code(request: Request):
+    data = await request.json()
+    code = data.get("code", "")
+
+    # Finetune for changes in results. Prompt engineer if required.
+    prompt = f"Explain the following code in step by step in a simple detailed manner:\n\n{code}"
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
