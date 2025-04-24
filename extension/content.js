@@ -56,7 +56,7 @@ document.querySelectorAll("pre code").forEach((codeBlock) => {
 `;
 
   button.addEventListener("mouseenter", () => {
-    button.style.backgroundColor = "#eab308"; // hover darker
+    button.style.backgroundColor = "#eab308"; 
     button.style.transform = "scale(1.03)";
   });
 
@@ -70,21 +70,21 @@ document.querySelectorAll("pre code").forEach((codeBlock) => {
   pre.insertAdjacentElement("afterend", container);
 
   button.addEventListener("click", async () => {
-    console.log("🔘 Explain Code button clicked");
+    console.log("Explain Code button clicked");
 
     const code = codeBlock.textContent;
-    console.log("📄 Code captured:", code);
+    console.log("Code captured:", code);
 
     button.disabled = true;
     button.innerText = "Explaining...";
 
     const settings = await chrome.storage.sync.get(["model"]);
-    const model = settings.model || "mixtral-8x7b-32768";  // fallback default
+    const model = settings.model || "mixtral-8x7b-32768";  
     console.log("⚙️ Model from storage:", model);
 
     chrome.runtime.sendMessage({ type: "get_tab_id" }, async (res) => {
       if (!res || !res.tabId) {
-        console.error("❌ Could not retrieve tab ID.");
+        console.error("Could not retrieve tab ID.");
         button.disabled = false;
         button.innerText = "Explain Code";
         return;
@@ -96,7 +96,7 @@ document.querySelectorAll("pre code").forEach((codeBlock) => {
         tab_id: res.tabId.toString()
       };
 
-      console.log("🚀 Sending request with body:", {
+      console.log("Sending request with body:", {
         code,
         model,
         tab_id: res.tabId?.toString()
@@ -110,7 +110,7 @@ document.querySelectorAll("pre code").forEach((codeBlock) => {
         });
 
         const data = await apiResponse.json();
-        console.log("📦 API response:", data);
+        console.log("API response:", data);
 
         const old = container.querySelector(".code-helper-explanation");
         if (old) old.remove();
@@ -153,7 +153,7 @@ document.querySelectorAll("pre code").forEach((codeBlock) => {
         container.appendChild(wrapper);
 
       } catch (err) {
-        console.error("❌ Error during fetch:", err);
+        console.error("Error during fetch:", err);
         alert("Error fetching explanation. Check your server.");
       } finally {
         button.disabled = false;
