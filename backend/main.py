@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import os
+from pydantic import BaseModel
+from typing import Dict
+from groq_chain import generate_explanation_with_memory, clear_tab_memory
 from dotenv import load_dotenv
 
-from groq_chain import generate_explanation
 
 load_dotenv()
 
 app = FastAPI()
 
-# CORS middleare to app
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,10 +18,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/explain")
-async def explain_code(request: Request):
-    data = await request.json()
-    code = data.get("code", "")
+class CodeRequest(BaseModel):
+    code: str
+    tab_id: str
+    model: str
+    api_key: str
 
-    explanation = generate_explanation(code)
-    return {"explanation": explanation}
+@app.post("/explain")
+async def explain_code(request: CodeRequest):
+    try:
+        explanation = generate_explanation_with_memory(
+            code=request.code,
+            tab_id=request.tab_id,
+            model=request.model,
+            api_key=request.api_key
+        )
+        return {"explanation": explanation}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/clear_memory")
+async def clear_memory(tab_id: str):
+    clear_tab_memory(tab_id)
+    return {"message": f"Memory cleared for tab {tab_id}"}
