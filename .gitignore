@@ -1,0 +1,16 @@
+# Python virtual env
+venv/
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# OS junk
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Extension build artifacts
+*.zip
