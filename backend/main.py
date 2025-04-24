@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import os
-import requests
 from dotenv import load_dotenv
+
+from groq_chain import generate_explanation
 
 load_dotenv()
 
@@ -17,32 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-
 @app.post("/explain")
 async def explain_code(request: Request):
     data = await request.json()
     code = data.get("code", "")
 
-    # Finetune for changes in results. Prompt engineer if required.
-    prompt = f"Explain the following code in step by step in a simple detailed manner:\n\n{code}"
-
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    payload = {
-        "model": "llama3-8b-8192",
-        "messages": [
-            {"role": "system", "content": "You are a very extremely helpful assistant who explains code."},
-            {"role": "user", "content": prompt}
-        ]
-    }
-
-    response = requests.post(GROQ_API_URL, headers=headers, json=payload)
-    result = response.json()
-
-    explanation = result["choices"][0]["message"]["content"]
+    explanation = generate_explanation(code)
     return {"explanation": explanation}
