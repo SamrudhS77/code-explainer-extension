@@ -28,3 +28,6 @@ Simply click **"Explain Code"** next to any `<pre><code>` block, and get a struc
 
 ## Example Usage
 ![alt text](misc/image.png)
+
+
+Inspired by :https://medium.com/@dineshramdsml/building-an-ai-powered-code-explanation-bot-as-a-chrome-extension-with-fastapi-c18c998e8e8e
