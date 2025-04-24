@@ -33,3 +33,10 @@ async def explain_code(request: Request):
         "Content-Type": "application/json"
     }
 
+    payload = {
+        "model": "llama3-8b-8192",
+        "messages": [
+            {"role": "system", "content": "You are a very extremely helpful assistant who explains code."},
+            {"role": "user", "content": prompt}
+        ]
+    }
