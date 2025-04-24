@@ -5,11 +5,12 @@
   <h2>Settings</h2>
   <label>Select Model:</label><br />
   <select id="modelSelect">
-    <option value="mixtral-8x7b-32768">Mixtral</option>
     <option value="llama3-8b-8192">LLaMA 3</option>
-    <option value="gemma-7b-it">Gemma</option>
   </select><br /><br />
   <button id="saveButton">Save</button>
+  <p id="saveMsg" style="display: none; color: green; font-size: 14px; margin-top: 8px;">
+    ✅ Model saved!
+  </p>  
   <script src="popup.js"></script>
 </body>
 </html>

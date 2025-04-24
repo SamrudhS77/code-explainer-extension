@@ -1,9 +1,11 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict
 from groq_chain import generate_explanation_with_memory, clear_tab_memory
 from dotenv import load_dotenv
+
 
 
 load_dotenv()
@@ -22,7 +24,6 @@ class CodeRequest(BaseModel):
     code: str
     tab_id: str
     model: str
-    api_key: str
 
 @app.post("/explain")
 async def explain_code(request: CodeRequest):
@@ -31,7 +32,7 @@ async def explain_code(request: CodeRequest):
             code=request.code,
             tab_id=request.tab_id,
             model=request.model,
-            api_key=request.api_key
+            api_key=os.getenv("GROQ_API_KEY")
         )
         return {"explanation": explanation}
     except Exception as e:
