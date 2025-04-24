@@ -27,4 +27,4 @@ Simply click **"Explain Code"** next to any `<pre><code>` block, and get a struc
 ---
 
 ## Example Usage
-![alt text](image.png)
+![alt text](misc/image.png)
